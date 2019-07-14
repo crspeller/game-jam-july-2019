@@ -32,7 +32,7 @@ AGameJamJulyPawn::AGameJamJulyPawn()
 	SpringArm->SetupAttachment(RootComponent);	// Attach SpringArm to RootComponent
 	SpringArm->TargetArmLength = 160.0f; // The camera follows at this distance behind the character	
 	SpringArm->SocketOffset = FVector(0.f,0.f,60.f);
-	SpringArm->bEnableCameraLag = false;	// Do not allow camera to lag
+	SpringArm->bEnableCameraLag = true;	// Do not allow camera to lag
 	SpringArm->CameraLagSpeed = 15.f;
 
 	// Create camera component 
@@ -87,6 +87,7 @@ void AGameJamJulyPawn::SetupPlayerInputComponent(class UInputComponent* PlayerIn
 	PlayerInputComponent->BindAxis("Thrust", this, &AGameJamJulyPawn::ThrustInput);
 	PlayerInputComponent->BindAxis("MoveUp", this, &AGameJamJulyPawn::MoveUpInput);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AGameJamJulyPawn::MoveRightInput);
+	PlayerInputComponent->BindAxis("Roll", this, &AGameJamJulyPawn::RollInput);
 }
 
 void AGameJamJulyPawn::ThrustInput(float Val)
@@ -126,8 +127,15 @@ void AGameJamJulyPawn::MoveRightInput(float Val)
 
 	// If turning, yaw value is used to influence roll
 	// If not turning, roll to reverse current roll value.
-	float TargetRollSpeed = bIsTurning ? (CurrentYawSpeed * 0.5f) : (GetActorRotation().Roll * -2.f);
+	float TargetRollSpeed = bIsTurning ? (CurrentYawSpeed * 0.5f) : 0.f;
 
 	// Smoothly interpolate roll speed
+	CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
+}
+
+void AGameJamJulyPawn::RollInput(float Val)
+{
+	float TargetRollSpeed = Val * RollSpeed;
+
 	CurrentRollSpeed = FMath::FInterpTo(CurrentRollSpeed, TargetRollSpeed, GetWorld()->GetDeltaSeconds(), 2.f);
 }

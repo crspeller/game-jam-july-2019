@@ -1,0 +1,9 @@
+{
+	"files.exclude": {
+		"D:/c-working-copies/game-jam-july-2019/.git": true,
+		"D:/c-working-copies/game-jam-july-2019/.vscode": true,
+		"D:/c-working-copies/game-jam-july-2019/Content": true,
+		"D:/c-working-copies/game-jam-july-2019/Intermediate": true,
+		"D:/c-working-copies/game-jam-july-2019/Saved": true
+	}
+}
